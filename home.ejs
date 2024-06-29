@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Searcher</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMzI2NzN8MHwxfGFsbHwyfHx8fHx8fHwxNjIzNjU3Nzk5&ixlib=rb-1.2.1&q=80&w=1080') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 700px;
+            padding: 40px;
+            margin: 150px auto;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .search-bar {
+            width: 90%;
+            padding: 15px;
+            margin-bottom: 25px;
+            font-size: 18px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+        }
+        .book-info {
+            text-align: left;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+        }
+        .menu {
+            margin-bottom: 30px;
+        }
+        .menu a {
+            padding: 12px 18px;
+            margin: 0 15px;
+            text-decoration: none;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .menu a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Book Searcher</h1>
+        <div class="menu">
+            <a href="http://localhost:3001/register">Register</a>
+            <a href="http://localhost:3001/login">Login</a>
+        </div>
+        <input type="text" class="search-bar" placeholder="Search for a book...">
+        <div class="book-info">
+        </div>
+    </div>
+</body>
+</html>

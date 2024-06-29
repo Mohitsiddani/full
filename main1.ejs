@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Finder</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-size: cover;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 30px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        #searchBox {
+            width: calc(100% - 24px);
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #bdc3c7;
+            border-radius: 6px;
+            font-size: 18px;
+        }
+
+        #searchButton {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+
+        #searchButton:hover {
+            background-color: #2980b9;
+        }
+
+        #results {
+            margin-top: 30px;
+        }
+
+        .book {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .book img {
+            max-width: 120px;
+            margin-right: 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-details {
+            flex-grow: 1;
+            text-align: left;
+        }
+
+        .book-title {
+            font-size: 1.6em;
+            margin-bottom: 5px;
+            color: #34495e;
+        }
+
+        .book-authors {
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+
+        .book-description {
+            color: #95a5a6;
+            margin-bottom: 10px;
+        }
+
+        .book-publisher,
+        .book-publishedDate,
+        .book-pageCount,
+        .book-url {
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .book-url a {
+            color: #2980b9;
+            text-decoration: none;
+            border-bottom: 1px dotted #2980b9;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        .book-url a:hover {
+            color: #1c6ea4;
+            border-bottom-color: #1c6ea4;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            color: white;
+            background-color: #e74c3c;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Book Library</h1>
+        <input type="text" id="searchBox" placeholder="Enter book name...">
+        <button id="searchButton">Search</button>
+        <a href="http://localhost:3000/">Logout</a>
+        <div id="results"></div>
+    </div>
+    <script>
+        document.getElementById('searchButton').addEventListener('click', function() {
+            const query = document.getElementById('searchBox').value;
+            if (query) {
+                fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const resultsDiv = document.getElementById('results');
+                        resultsDiv.innerHTML = '';
+                        if (data.items && data.items.length > 0) {
+                            const book = data.items[0].volumeInfo;
+                            const bookElement = document.createElement('div');
+                            bookElement.classList.add('book');
+                            
+                            const thumbnail = book.imageLinks ? book.imageLinks.thumbnail : 'https://via.placeholder.com/100x150';
+                            bookElement.innerHTML = `
+                                <img src="${thumbnail}" alt="Book cover">
+                                <div class="book-details">
+                                    <div class="book-title">${book.title}</div>
+                                    <div class="book-authors">${book.authors ? book.authors.join(', ') : 'Unknown Author'}</div>
+                                    <div class="book-description">${book.description ? book.description.substring(0, 200) + '...' : 'No description available'}</div>
+                                    <div class="book-publisher"><strong>Publisher:</strong> ${book.publisher ? book.publisher : 'Unknown Publisher'}</div>
+                                    <div class="book-publishedDate"><strong>Published Date:</strong> ${book.publishedDate ? book.publishedDate : 'Unknown Date'}</div>
+                                    <div class="book-pageCount"><strong>Page Count:</strong> ${book.pageCount ? book.pageCount : 'N/A'}</div>
+                                    <div class="book-url"><strong>Search in Google:</strong> <a href="https://www.google.com/search?q=${encodeURIComponent(book.title)}" target="_blank">${book.title}</a></div>
+                                </div>
+                            `;
+
+                            resultsDiv.appendChild(bookElement);
+                        } else {
+                            resultsDiv.innerHTML = '<p>No results found</p>';
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        });
+    </script>
+</body>
+</html>
